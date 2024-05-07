@@ -1,0 +1,36 @@
+.app-page {
+  .main-title {
+    border-bottom: 1px solid #fff;
+    padding: 10px 20px;
+    color: #000;
+    background: #fff;
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .main-body {
+    padding: 20px;
+    position: relative;
+  }
+}
+
+.text-center .arco-input {
+  text-align: center !important;
+}
+
+.link {
+  color: rgb(22, 93, 255);
+}
+
+.filter-width {
+  width: 200px;
+}
+
+.arco-spin {
+  display: block !important;
+}
+
+.dp__action_button {
+  min-width: 40px;
+  text-align: center;
+}
