@@ -1,18 +1,27 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: {enabled: true},
-  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/device'],
+  runtimeConfig: {
+    public: {
+      appName: null,
+      apiBaseUrl: null,
+    },
+  },
+
+  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/color-mode', '@nuxtjs/device'],
   ssr: false,
 
   app: {
     head: {
       charset: 'utf-8',
+      htmlAttrs: {
+        lang: 'zh-CN',
+      },
       viewport: 'width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0',
-      title: process.env.APP_NAME,
       meta: [
-        {name: 'description', content: process.env.APP_DESCRIPTION}
+        {name: 'description', content: process.env.NUXT_PUBLIC_APP_DESCRIPTION},
       ],
-    }
+    },
   },
 
   css: [

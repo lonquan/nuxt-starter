@@ -3,19 +3,22 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
-    "generate": "nuxt generate",
+    "build": "nuxt build --dotenv .env.prod",
+    "dev": "nuxt dev --dotenv .env.local",
+    "generate": "nuxt generate --dotenv .env.prod",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "dayjs": "^1.11.11",
+    "lodash": "^4.17.21",
     "nuxt": "^3.11.2",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
     "@arco-design/web-vue": "^2.55.1",
+    "@nuxtjs/color-mode": "^3.4.1",
     "@nuxtjs/device": "^3.1.1",
     "@nuxtjs/tailwindcss": "^6.12.0",
     "sass": "^1.77.0",
