@@ -1,14 +1,25 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+
+const isProduction = process.env.NODE_ENV === 'production'
+
 export default defineNuxtConfig({
-  devtools: {enabled: true},
+  devtools: {enabled: !isProduction},
+
   runtimeConfig: {
     public: {
-      appName: null,
-      apiBaseUrl: null,
+      app: {
+        title: process.env.NUXT_PUBLIC_APP_NAME,
+        description: process.env.NUXT_PUBLIC_APP_DESCRIPTION,
+      },
+      apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL,
     },
   },
 
-  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/color-mode', '@nuxtjs/device'],
+  modules: [
+    '@nuxtjs/tailwindcss',
+    '@nuxtjs/device',
+  ],
+
   ssr: false,
 
   app: {
@@ -17,6 +28,7 @@ export default defineNuxtConfig({
       htmlAttrs: {
         lang: 'zh-CN',
       },
+      titleTemplate: `%s - ${ process.env.NUXT_PUBLIC_APP_NAME }`,
       viewport: 'width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0',
       meta: [
         {name: 'description', content: process.env.NUXT_PUBLIC_APP_DESCRIPTION},
@@ -42,6 +54,9 @@ export default defineNuxtConfig({
 
   // https://nuxt.com/modules/tailwindcss
   tailwindcss: {
-    configPath: '~tailwind.config.js', viewer: true,
+    configPath: '~tailwind.config.js', viewer: !isProduction,
+    config: {darkMode: 'selector'},
   },
+
+  compatibilityDate: '2024-08-17',
 })

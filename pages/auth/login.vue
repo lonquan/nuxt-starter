@@ -2,13 +2,17 @@
   <div class="page">
     <div class="image" :style="{backgroundImage:`url(${useBackgroundImage})`}">
       <div class="copyright text-white">
-        <span>Designed by </span>
-        <a href="#">Lonquan ❤️</a>
+        <span>Designed by</span>
+        <a href="https://github.com/lonquan" target="_blank" class="px-1">
+          <span>Lonquan️</span>
+          <span style="color: rgb(226, 117, 117); font-size: 14px; padding-left: 4px;">❤</span>
+        </a>
+        <span>{{ useCopyYear }}</span>
       </div>
     </div>
 
     <div class="login">
-      <div class="py-10 text-2xl text-blue-600"><h1>Vayne</h1></div>
+      <div class="py-10 text-2xl"><h1>{{ app?.title }}</h1></div>
 
       <div class="min-w-[400px]">
         <a-form
@@ -61,19 +65,10 @@
             </a-button>
           </a-form-item>
           <a-form-item>
-            <a-button long type="text">
-              <template #icon>
-                <icon-scan/>
-              </template>
-              忘记密码?
-            </a-button>
+            <a-link>忘记密码?</a-link>
           </a-form-item>
         </a-form>
       </div>
-
-<!--      <div class="copyright text-gray-500">-->
-<!--        <span>&copy; 2024 Lonquan</span>-->
-<!--      </div>-->
     </div>
   </div>
 </template>
@@ -83,10 +78,12 @@ import lightBg from '~/assets/img/bg/login-bg-light.jpg'
 import nightBg from '~/assets/img/bg/login-bg-night.jpg'
 
 definePageMeta({layout: 'empty'})
-useHead({title: '登录'})
+useHead({title: '系统登录'})
 
-const colorMode = useColorMode()
-const useBackgroundImage = computed(_ => colorMode.value === 'light' ? lightBg : nightBg)
+const {$darkMode} = useNuxtApp()
+const {app} = useRuntimeConfig().public
+
+const useBackgroundImage = computed(_ => $darkMode.isDark.value ? nightBg : lightBg)
 
 const useCopyYear = computed(_ => {
   const year = (new Date()).getFullYear()
@@ -104,6 +101,7 @@ const loginForm = ref()
 
 const handleLogin = ({values, errors}) => {
   console.log('values:', values, '\nerrors:', errors, useRuntimeConfig())
+  useRouter().replace({path: '/'})
 }
 </script>
 

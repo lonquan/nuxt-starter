@@ -1,9 +1,6 @@
-import {useTheme} from '../composables/useTheme.js'
-
 export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.hook('app:created', _ => {
     console.log('app:created')
-    useTheme()
   })
 
   nuxtApp.hook('app:beforeMount', _ => {

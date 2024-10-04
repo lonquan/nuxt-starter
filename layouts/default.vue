@@ -1,156 +1,165 @@
 <template>
-  <div class="layout-console">
-    <div class="header">
-      <div class="menu">
-        <div class="logo" @click="handleRefresh">
-          站点名称
-        </div>
-        <TopNav :menus="menu.top"/>
+  <a-layout class="layout" has-sider>
+    <a-layout-sider
+        class="layout-sider"
+        collapsible
+        breakpoint="lg"
+        :collapsed="hasCollapsed"
+        @collapse="handleCollapsed"
+    >
+      <a href="/console" class="layout-logo">
+        <img alt="logo" src="/assets/img/logo.png" class="logo"/>
+        <a-typography-title class="title" :heading="5" v-show="!hasCollapsed">
+          Leopard
+        </a-typography-title>
+      </a>
+      <div class="menu-wrapper">
+        <Menus/>
       </div>
-      <div class="profile">
-        <Profile/>
-      </div>
-    </div>
 
-    <div class="aside" :class="{ 'folded': menuFolded }">
-    </div>
+      <template #trigger="{ collapsed }">
+        <icon-menu-fold v-if="collapsed"/>
+        <icon-menu-unfold v-else/>
+      </template>
+    </a-layout-sider>
+    <a-layout-header class="layout-header">
+      <div class="left"></div>
+      <Profile class="right"/>
+    </a-layout-header>
 
-    <div class="main" :class="{ 'folded': menuFolded, 'is-index': isIndexPage }">
-      <slot/>
-    </div>
-  </div>
+    <a-layout-content class="layout-body" :class="{collapsed: hasCollapsed}">
+      <NuxtPage></NuxtPage>
+    </a-layout-content>
+  </a-layout>
 </template>
 
 <script setup>
-import TopNav from '../components/header/TopNav.vue'
-import Profile from '../components/header/Profile.vue'
-import menu from '../config/menu.js'
+useHead({title: '控制中心'})
+import Menus from '../components/layout/Menus.vue'
+import Profile from '../components/layout/Profile.vue'
 
-const menuFolded = ref(false)
-const isIndexPage = ref(false)
-
-const handleRefresh = () => {
-
+const hasCollapsed = ref(false)
+const handleCollapsed = (collapsed, type) => {
+  hasCollapsed.value = collapsed
 }
+
 </script>
 
 <style scoped lang="scss">
-$header-height: 50px;
-$aside-width: 200px;
-$aside-fold-width: 48px;
+$header-height: 60px;
 
-.layout-console {
-  background-color: #f2f2f2;
-  width: 100vw;
-  height: 100vh;
-}
+.layout {
+  background: #F2F3F5;
+  min-height: 100vh;
 
-.header {
-  @apply fixed left-0 right-0 top-0 w-full border-b flex justify-between items-center px-4;
-  height: $header-height;
-  background-color: #262f3e;
-  border-color: #273246;
-
-  .menu {
-    @apply flex justify-start items-center;
-  }
-
-  .logo {
-    @apply text-gray-200 font-bold text-xl cursor-pointer select-none;
-  }
-
-  .profile {
-    @apply flex justify-center items-center;
-  }
-}
-
-.aside {
-  @apply fixed left-0 bottom-0;
-  top: $header-height;
-  width: $aside-width;
-  transition: width linear 0.3s;
-
-  &.folded {
-    width: $aside-fold-width;
-  }
-
-  .menus {
-    position: relative;
-    background-color: #1e222d;
-    height: 100%;
-    vertical-align: top;
-    transition: all .2s cubic-bezier(.4, 0, .2, 1);
-    overflow-x: hidden;
+  .layout-logo {
     display: flex;
-    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    height: $header-height;
+    gap: 8px;
+    cursor: pointer;
 
-    .menu-header {
-      padding: 18px 0 10px 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    .logo {
+      width: 32px;
+      height: 32px;
     }
 
-    .menu-body {
-      flex: 1;
-      overflow: auto;
-      overflow-x: hidden;
-
-      &::-webkit-scrollbar {
-        width: 15px;
-        height: 15px;
-        background-color: transparent;
-        border-radius: 9px;
-      }
-
-      &::-webkit-scrollbar-thumb {
-        background-color: #344158;
-        border-radius: 0;
-        background-clip: content-box;
-        border: 4px solid transparent;
-      }
-    }
-
-    .menu-footer {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 56px;
-      background-color: #262f3e;
-
-      .href {
-        width: auto !important;
-        padding: 0 10px;
-        line-height: 56px;
-      }
-
-      .fold-btn, .href {
-        width: 64px;
-        height: 56px;
-        color: #69747C;
-
-        &:hover {
-          background-color: #344258;
-          color: #ffffff;
-        }
-      }
+    .title {
+      margin: 0;
+      font-size: 20px;
+      user-select: none;
     }
   }
 }
 
-.main {
-  @apply fixed right-0 bottom-0 overflow-y-auto;
-  top: $header-height;
-  left: $aside-width;
-  background-color: #f3f4f7 !important;
-  transition: all .2s cubic-bezier(.4, 0, .2, 1);
+.layout-sider {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 2;
 
-  &.folded {
-    left: $aside-fold-width;
+  &::after {
+    position: absolute;
+    top: 0;
+    right: -1px;
+    display: block;
+    width: 1px;
+    height: 100%;
+    background-color: var(--color-border);
+    content: '';
   }
 
-  &.is-index {
+  > :deep(.arco-layout-sider-children) {
+    overflow-y: hidden;
+  }
+
+  .menu-wrapper {
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    &::-webkit-scrollbar {
+      width: 12px;
+      height: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border: 4px solid transparent;
+      background-clip: padding-box;
+      border-radius: 6px;
+      background-color: var(--color-text-4);
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background-color: var(--color-text-3);
+    }
+  }
+}
+
+.layout-header {
+  position: fixed;
+  width: 100vw;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  height: $header-height;
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--color-bg-2);
+
+  &::after {
+    position: absolute;
     left: 0;
+    bottom: -1px;
+    display: block;
+    width: 100%;
+    height: 1px;
+    background-color: var(--color-border);
+    content: '';
+  }
+
+  .left {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .right {
+
+  }
+}
+
+$body-padding: 12px;
+
+.layout-body {
+  box-sizing: border-box;
+  padding: $header-height + $body-padding $body-padding $body-padding 200px + $body-padding;
+  transition: padding-left 0.2s cubic-bezier(0.34, 0.69, 0.1, 1);
+
+  &.collapsed {
+    padding-left: 48px + $body-padding;
   }
 }
 </style>
